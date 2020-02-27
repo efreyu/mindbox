@@ -133,21 +133,29 @@ general_help() {
     esac
 }
 
+run() {
+    fix_env_file
+    fix_perm_db
+    if [ $1 == 'build' ]; then
+        eval ${DOCKERCMD} up -d --build $2 $3
+    else
+        eval ${DOCKERCMD} up -d $2 $3
+    fi
+    fix_perm_data
+    fix_symlink
+    ## Running migration
+    $0 -o php-cli php artisan migrate
+    ## Running tests
+    $0 -t
+}
+
 
 case "$1" in
     --build|-b)
-        fix_env_file
-        fix_perm_db
-        eval ${DOCKERCMD} up -d --build $2 $3
-        fix_perm_data
-        fix_symlink
+        run 'build' $2 $3
         ;;
     --run|-r)
-        fix_env_file
-        fix_perm_db
-        eval ${DOCKERCMD} up -d
-        fix_perm_data
-        fix_symlink
+        run 'run' $2 $3
         ;;
     --down|-d)
         fix_perm_data
@@ -163,12 +171,15 @@ case "$1" in
     --remove)
         eval ${DOCKERCORE} system prune -a
         ;;
+    --test|-t)
+        eval ${DOCKERCMD} exec php-cli php vendor/bin/phpunit
+        ;;
     --help|-h)
         general_help $2 $3
         ;;
     *)
         pc "yellow" "Nothing caused.\n"
-        pc "green" "Usage: $0 {--build|--run|--down|--own|--migration|--remove|--help} CMD\n"
+        pc "green" "Usage: $0 {--build|--run|--down|--own|--test|--migration|--remove|--help} CMD\n"
         exit 1
 
 esac

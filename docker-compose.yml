@@ -14,21 +14,21 @@ services:
       - ./docker/static:/var/static
     ports:
       - "8080:443"
-#    links:
-#      - php-fpm
-#  php-fpm:
-#    container_name: 'php-fpm'
-#    build:
-#      context: ./
-#      dockerfile: ./docker/php-fpm.docker
-#    volumes:
-#      - ./:/var/www
-#      - ./docker/static:/var/static
-#    links:
-#      - mysql
-#      - redis
-#    env_file:
-#      - ./env_file
+    links:
+      - php-fpm
+  php-fpm:
+    container_name: 'php-fpm'
+    build:
+      context: ./
+      dockerfile: ./docker/php-fpm.docker
+    volumes:
+      - ./:/var/www
+      - ./docker/static:/var/static
+    links:
+      - mysql
+      - redis
+    env_file:
+      - ./env_file
   php-cli:
     container_name: 'php-cli'
     build:

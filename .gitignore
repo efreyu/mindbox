@@ -9,10 +9,17 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+composer.lock
+# IDE
 .idea
 .vc
+# File extenstions
 *.sql
+# Filesystems
 .editorconfig
-composer.lock
-env_file
 readme.md
+# Docker
+env_file
+# Laravel IDE Helper
+_ide_helper.php
+.phpstorm.meta.php
