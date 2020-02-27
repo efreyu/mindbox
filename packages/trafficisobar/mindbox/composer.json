@@ -1,0 +1,49 @@
+{
+    "name": "trafficisobar/mindbox",
+    "description": "Task from mindbox",
+    "type": "library",
+    "license": "MIT",
+    "version": "0.0.1-dev",
+    "authors": [
+        {
+            "name": "Artur Barilo",
+            "email": "artur.barilo@t-agency.ru"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "TrafficIsobar\\Mindbox\\": "./src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "TrafficIsobar\\Mindbox\\Tests\\": "./tests/"
+        }
+    },
+    "require": {
+        "php": ">=7.1",
+        "ext-curl": "*",
+        "ext-json": "*",
+        "guzzlehttp/guzzle": "6.3.3",
+        "darkaonline/l5-swagger": "5.8.3"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.0.1-dev"
+        },
+        "laravel": {
+            "providers": [
+                "TrafficIsobar\\Mindbox\\app\\Providers\\MindboxServiceProvider"
+            ],
+            "aliases": {
+                "DirectCRM": "TrafficIsobar\\Mindbox\\app\\Facades\\DirectCRM"
+            }
+        }
+    },
+    "scripts": {
+        "post-update-cmd": [
+            "@php artisan l5-swagger:generate"
+        ]
+    }
+}
