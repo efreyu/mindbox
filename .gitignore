@@ -9,3 +9,10 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+.idea
+.vc
+*.sql
+.editorconfig
+composer.lock
+env_file
+readme.md
