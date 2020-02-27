@@ -12,7 +12,7 @@ class ProjectsTest extends TestCase
 
 
     /** @test */
-    function a_user_can_login() {
+    public function a_user_can_not_login() {
 
         $wrongData = [
             'username' => $this->faker->unique()->safeEmail,
@@ -22,5 +22,20 @@ class ProjectsTest extends TestCase
         $data = $this->post('/api/v1/user/auth', $wrongData);
         $data->assertStatus(400);
 
+    }
+
+    /** @test */
+    public function a_user_can_login() {
+        $configs = [
+            'email' => config("mindbox.testUserLogin"),
+            'password' => config("mindbox.testUserPassword"),
+        ];
+
+        if ($configs['email'] && $configs['password']) {
+            $data = $this->post('/api/v1/user/auth', $configs);
+            dd($data->status());
+        } else {
+            $this->assertTrue(true);
+        }
     }
 }

@@ -37,6 +37,30 @@ abstract class ResponseAbstract
     }
 
     /**
+     * Успешная авторизация
+     * @return bool
+     */
+    public function isAuthenticated(): bool {
+        return $this->isSuccess() && $this->get('customer', 'processingStatus') == 'AuthenticationSucceeded';
+    }
+
+    /**
+     * Не верный пароль
+     * @return bool
+     */
+    public function isNotAuthenticated(): bool {
+        return $this->isSuccess() && $this->get('customer', 'processingStatus') == 'AuthenticationFailed';
+    }
+
+    /**
+     * Потребитель не найден
+     * @return bool
+     */
+    public function isNotFound(): bool {
+        return $this->isSuccess() && $this->get('customer', 'processingStatus') == 'NotFound';
+    }
+
+    /**
      * @return bool
      */
     public function isFound(): bool {

@@ -40,6 +40,11 @@ class AuthController
     public function login(Request $request)
     {
         $requestFields = $request->all();
+
+        $result = [
+            'code' => 401,
+            'message' => '',
+        ];
         $validator = Validator::make(
             $requestFields,
             [
@@ -55,8 +60,16 @@ class AuthController
             'email' => $requestFields['email'],
             'password' => $requestFields['password'],
         ];
-        $result = \DirectCRM::sendRequest('Jti.v3.CustomerAuthentication', $userInfo);
+        $response = \DirectCRM::sendRequest('Jti.v3.CustomerAuthentication', $userInfo);
 
-        return response()->json($result['data'], $result['code']);
+        if ($response->isAuthenticated()) {
+            $result['code'] = 200;
+            $result['message'] = 'Вы успешно авторизованы';
+        } elseif ($response->isAuthenticated() || $response->isNotFound()) {
+            $result['code'] = 401;
+            $result['message'] = 'Логин или пароль указаны не верно';
+        }
+
+        return response()->json($result['message'], $result['code']);
     }
 }
