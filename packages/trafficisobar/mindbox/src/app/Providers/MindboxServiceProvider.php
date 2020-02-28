@@ -2,9 +2,12 @@
 
 namespace TrafficIsobar\Mindbox\app\Providers;
 
+use Auth;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Inertia\Inertia;
 
-class MindboxServiceProvider extends BaseServiceProvider
+class MindboxServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap any application services.
@@ -20,6 +23,12 @@ class MindboxServiceProvider extends BaseServiceProvider
         $this->loadRoutesFrom(__DIR__ . '/../../routes/api.php');
         $this->loadRoutesFrom(__DIR__ . '/../../routes/web.php');
 
+        $this->registerPolicies();
+
+        Auth::provider('api', function($app, array $config) {
+            return $app->make(\TrafficIsobar\Mindbox\app\Providers\UserProvider::class);
+        });
+
         $this->loadHelpers();
         app('router')->aliasMiddleware('web', '\Inertia\Middleware::class');
 
@@ -31,18 +40,6 @@ class MindboxServiceProvider extends BaseServiceProvider
             ],
             'mindbox-config'
         );
-        $this->publishes(
-            [
-                __DIR__ . '/../../resources/assets' => resource_path('assets/vendor/mindbox')
-            ],
-            'mindbox-assets'
-        );
-        /*$this->publishes(
-            [
-                '/../../resources/views' => resource_path('views/vendor/trafficisobar/mindboxcore')
-            ],
-            'mindbox-views'
-        );*/
     }
 
     /**
@@ -54,6 +51,26 @@ class MindboxServiceProvider extends BaseServiceProvider
     {
         $this->app->singleton('DirectCRM', function () {
             return new \TrafficIsobar\Mindbox\app\Http\Classes\DirectCRM();
+        });
+        Inertia::share('app.name', config('app.name'));
+        Inertia::share('errors', function () {
+            if (is_string(session()->get('errors'))) {
+                return (object) [[session()->get('errors')]];
+            }
+            return session()->get('errors') ? session()->get('errors')->getBag('default')->getMessages() : (object) [];
+        });
+        Inertia::share('successMessage', function () {
+            return session()->get('successMessage') ? session()->get('successMessage') : null;
+        });
+        Inertia::share('auth.user', function () {
+            if (Auth::user()) {
+                return [
+                    'id' => Auth::user()->getId(),
+                    'name' => Auth::user()->getUsername(),
+                ];
+            } else {
+                return (object) [];
+            }
         });
     }
 

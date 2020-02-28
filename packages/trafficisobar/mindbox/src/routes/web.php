@@ -10,10 +10,15 @@ Route::group([
     Inertia::setRootView('mindbox::app');
 
     Route::get('/', function () {
-        return Inertia::render('Welcome', [
+        return Inertia::render('Home', [
             'foo' => 'bar'
         ]);
     });
+
+
+    Route::get('/auth', 'AuthController@index')->name('auth.index');
+    Route::post('/login', 'AuthController@login')->name('auth.login');
+    Route::get('/logout', 'AuthController@logout')->name('auth.logout');
 
 
 

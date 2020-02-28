@@ -12,7 +12,7 @@ const mix = require('laravel-mix');
  */
 
 mix.js('src/resources/js/app.js', 'publishable/js')
-   // .sass('resources/sass/app.scss', 'public/css');
+   .sass('src/resources/sass/app.scss', 'publishable/css')
     .webpackConfig({
         output: { chunkFilename: 'js/[name].[contenthash].js' },
         resolve: {

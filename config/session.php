@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Support\Str;
-
 return [
 
     /*
@@ -31,7 +29,7 @@ return [
     |
     */
 
-    'lifetime' => env('SESSION_LIFETIME', 120),
+    'lifetime' => env('SESSION_LIFETIME', 24),
 
     'expire_on_close' => false,
 
@@ -57,9 +55,12 @@ return [
     | files may be stored. A default has been set for you but a different
     | location may be specified. This is only needed for file sessions.
     |
+    | If you are working via ssh, put this in your .env file:
+    | SESSION_FILES="/var/www/www-root/data/bin-tmp"
+    |
     */
 
-    'files' => storage_path('framework/sessions'),
+    'files' => env('SESSION_FILES', storage_path('framework/sessions')),
 
     /*
     |--------------------------------------------------------------------------
@@ -126,7 +127,7 @@ return [
 
     'cookie' => env(
         'SESSION_COOKIE',
-        Str::slug(env('APP_NAME', 'laravel'), '_').'_session'
+        str_slug(env('APP_NAME', 'laravel'), '_').'_session'
     ),
 
     /*

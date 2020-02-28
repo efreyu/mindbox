@@ -1,6 +1,9 @@
 import { InertiaApp } from '@inertiajs/inertia-vue'
 import Vue from 'vue'
+// import axios from 'axios'
+// import VueAxios from 'vue-axios'
 
+// Vue.use(VueAxios, axios)
 Vue.use(InertiaApp)
 
 const app = document.getElementById('app')

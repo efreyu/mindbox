@@ -8,7 +8,6 @@ _bash, docker, docker-compose_
 chmod +x run.sh
 ./run.sh --build
 ./run.sh -o php-cli php artisan vendor:publish --tag=mindbox-config
-./run.sh -o php-cli php artisan vendor:publish --tag=mindbox-assets
 ```
 
 После этого вы можете поменять настройки config/mindbox.php и посетить https://127.0.0.1:8080/

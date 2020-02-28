@@ -3,6 +3,8 @@
 namespace TrafficIsobar\Mindbox\app\Http\Controllers;
 
 
+use Auth;
+use Inertia\Inertia;
 use Validator,
     Illuminate\Http\Request,
     Illuminate\Routing\Controller;
@@ -18,7 +20,7 @@ class AuthController extends Controller
      *     tags={"Авторизация"},
      *     summary="Авторизация по логину и паролю",
      *     description="",
-     *     operationId="authUser",
+     *     operationId="userAuth",
      *     @OA\RequestBody(
      *         @OA\MediaType(
      *             mediaType="application/json",
@@ -37,14 +39,10 @@ class AuthController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login(Request $request)
+    public function userAuth(Request $request)
     {
         $requestFields = $request->all();
 
-        $result = [
-            'code' => 401,
-            'message' => '',
-        ];
         $validator = Validator::make(
             $requestFields,
             [
@@ -56,9 +54,59 @@ class AuthController extends Controller
             return response()->json($validator->errors()->toArray(), 401);
         }
 
-        $userInfo['customer'] = [
-            'email' => $requestFields['email'],
+        $result = $this->authRequest($requestFields['email'], $requestFields['password']);
+
+        return response()->json($result['message'], $result['code']);
+    }
+
+    public function index()
+    {
+        return Inertia::render('Auth/Index');
+    }
+
+    public function login(Request $request)
+    {
+
+        $requestFields = $request->all();
+
+        $validator = Validator::make(
+            $requestFields,
+            [
+                'email' => 'required|email',
+                'password' => 'required',
+            ]
+        );
+        if ($validator->fails()) {
+            return redirect()->route('auth.index')->with('errors', $validator->errors()->toArray());
+        }
+
+        $result = $this->authRequest($requestFields['email'], $requestFields['password']);
+        $credentials = [
+            'username' => $requestFields['email'],
             'password' => $requestFields['password'],
+        ];
+        if ($result['code'] == 200 && Auth::attempt($credentials)) {
+            return redirect()->route('home')->with('successMessage', $result['message']);
+        }
+
+        return redirect()->route('auth.index')->with('errors', $result['message']);
+    }
+
+    public function logout() {
+        Auth::logout();
+
+        return redirect()->route('home');
+    }
+
+    private function authRequest($email, $password) {
+        $result = [
+            'code' => 401,
+            'message' => '',
+        ];
+
+        $userInfo['customer'] = [
+            'email' => $email,
+            'password' => $password,
         ];
         $response = \DirectCRM::sendRequest('Jti.v3.CustomerAuthentication', $userInfo);
 
@@ -69,8 +117,7 @@ class AuthController extends Controller
             $result['code'] = 401;
             $result['message'] = 'Логин или пароль указаны не верно';
         }
-        $response = \DirectCRM::sendRequest('Jti.v3.CustomerAuthentication', $userInfo);
 
-        return response()->json($result['message'], $result['code']);
+        return $result;
     }
 }

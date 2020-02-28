@@ -18,7 +18,6 @@ config/mindbox.php
 # File extenstions
 *.sql
 # Filesystems
-.editorconfig
 readme.md
 # Docker
 env_file

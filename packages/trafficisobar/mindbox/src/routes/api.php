@@ -6,10 +6,7 @@ Route::group([
     'prefix' => '/api/v1',
 ], function () {
 
-    Route::get('test', function () {
-        dd('test');
-    });
     # Авторизация
-    Route::post('user/auth', 'AuthController@login')->name('user.auth');
+    Route::post('user/auth', 'AuthController@userAuth')->name('user.auth');
 
 });
