@@ -52,7 +52,7 @@ services:
     container_name: 'mysql'
     image: mysql:5.7
     volumes:
-      - ./docker/.db:/var/lib/mysql #fixme нужно добавить глобальный путь для файлов бд в системе
+      - ./docker/.db:/var/lib/mysql # нужно добавить глобальный путь для файлов бд в системе
     environment:
       - "MYSQL_ROOT_PASSWORD=secret"
       - "MYSQL_USER=homestead"
@@ -72,7 +72,7 @@ services:
       dockerfile: ./docker/node.docker
     volumes:
       - ./:/var/www
-#      - ~/.npm:/root/.npm #fixme нужно добавить глобальный путь для кеша npm в системе
-#    ports:
-#      - "35729:35729" # for livereload plugin
+      - ~/.npm_docker_cache:/root/.npm # нужно добавить глобальный путь для кеша npm в системе
+    ports:
+      - "35729:35729" # for livereload plugin
     tty: true

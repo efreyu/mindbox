@@ -13,6 +13,7 @@ class MindboxServiceProvider extends BaseServiceProvider
      */
     public function boot()
     {
+        # TODO refactor this
         $this->publishes(
             [
                 __DIR__.'/../../configs/mindbox.php' => config_path('mindbox.php'),
@@ -21,24 +22,16 @@ class MindboxServiceProvider extends BaseServiceProvider
         );
 
         $this->mergeConfigFrom(__DIR__ . '/../../configs/mindbox.php', 'mindbox');
-//        $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'trafficisobar/minicrm');
-
-//        $configPath = __DIR__ . '/../config/mindbox.php';
-//        if (function_exists('config_path')) {
-//            $publishPath = config_path('mindbox.php');
-//        } else {
-//            $publishPath = base_path('config/mindbox.php');
-//        }
-//        $this->publishes([$configPath => $publishPath], 'mindbox-config');
 
         $this->loadRoutesFrom(__DIR__ . '/../../routes/api.php');
         $this->loadRoutesFrom(__DIR__ . '/../../routes/web.php');
 
-//        $this->loadMigrationsFrom(__DIR__.'/path/to/migrations');
-//
-//        $this->loadRoutesFrom(__DIR__.'/routes.php');
-//
-//        $this->loadViewsFrom(__DIR__.'/path/to/views', 'courier');
+        $this->publishes(
+            [
+                __DIR__ . '/../../resources/assets' => resource_path('assets/vendor/mindbox')
+            ],
+            'mindbox-assets'
+        );
     }
 
     /**
