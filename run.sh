@@ -196,7 +196,7 @@ case "$1" in
         eval ${DOCKERCORE} system prune -a
         ;;
     --test|-t)
-        eval ${DOCKERCMD} exec php-cli php vendor/bin/phpunit
+        eval ${DOCKERCMD} exec php-cli php vendor/bin/phpunit packages/trafficisobar/mindbox
         ;;
     --help|-h)
         general_help $2 $3

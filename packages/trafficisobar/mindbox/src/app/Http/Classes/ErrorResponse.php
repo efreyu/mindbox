@@ -44,7 +44,7 @@ class ErrorResponse extends ResponseAbstract
         }
         if (empty($this->responseCode) || empty($this->responseMessage)) {
             $this->responseCode = 503;
-            $this->responseMessage = 'Что-то пошло не так';
+            $this->responseMessage = 'CRM не доступна';
         }
     }
 }
