@@ -53,7 +53,7 @@ class AuthController
             ]
         );
         if ($validator->fails()) {
-            return response()->json($validator->errors()->toArray(), 400);
+            return response()->json($validator->errors()->toArray(), 401);
         }
 
         $userInfo['customer'] = [
@@ -65,10 +65,11 @@ class AuthController
         if ($response->isAuthenticated()) {
             $result['code'] = 200;
             $result['message'] = 'Вы успешно авторизованы';
-        } elseif ($response->isAuthenticated() || $response->isNotFound()) {
+        } elseif ($response->isNotAuthenticated() || $response->isNotFound()) {
             $result['code'] = 401;
             $result['message'] = 'Логин или пароль указаны не верно';
         }
+        $response = \DirectCRM::sendRequest('Jti.v3.CustomerAuthentication', $userInfo);
 
         return response()->json($result['message'], $result['code']);
     }

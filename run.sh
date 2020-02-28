@@ -72,6 +72,14 @@ fix_symlink() {
     eval ${DOCKERCMD} exec php-cli sh /usr/local/bin/fix_symlink;
 }
 
+composer_commands() {
+    if [ ! -d "$(pwd)/vendor" ]; then
+        own_commands php-cli composer install;
+        own_commands php-cli chmod -R 777 /var/www/vendor;
+        own_commands php-cli chmod -R 777 /var/www/composer.lock;
+    fi;
+}
+
 own_commands() {
     eval ${DOCKERCMD} exec $1 $2 $3 $4 $5 $6 $7 $8
 }
@@ -118,6 +126,10 @@ general_help() {
             pc "green" "--rollback | -r"
             pc "none" " - откатить миграцию\n"
         ;;
+        --composer|composer)
+            pc "green" "$0 --composer "
+            pc "none" "Запускает команду 'composer install' внутри контейнера\n"
+        ;;
         --remove|remove)
             pc "green" "$0 --remove "
             pc "none" "Удалить все контейнеры внутри системы\n"
@@ -128,7 +140,14 @@ general_help() {
             else
                 pc "yellow" "Nothing caused.\n"
             fi
-            pc "green" "Usage: $0 --help {--build|--run|--down|--own|--migration|--remove}\n"
+            $0 --help build
+            $0 --help run
+            $0 --help down
+            $0 --help own
+            $0 --help migration
+            $0 --help composer
+            $0 --help remove
+            pc "green" "Usage: $0 --help {--build|--run|--down|--own|--test|--migration|--composer|--remove|--help}\n"
             exit 1
     esac
 }
@@ -143,6 +162,8 @@ run() {
     fi
     fix_perm_data
     fix_symlink
+    ## Running `composer install`
+    $0 --composer
     ## Running migration
     $0 -o php-cli php artisan migrate
     ## Running tests
@@ -168,6 +189,9 @@ case "$1" in
     --migration|-m)
         migration_commands $1 $2 $3
         ;;
+    --composer)
+        composer_commands
+        ;;
     --remove)
         eval ${DOCKERCORE} system prune -a
         ;;
@@ -179,7 +203,7 @@ case "$1" in
         ;;
     *)
         pc "yellow" "Nothing caused.\n"
-        pc "green" "Usage: $0 {--build|--run|--down|--own|--test|--migration|--remove|--help} CMD\n"
+        pc "green" "Usage: $0 {--build|--run|--down|--own|--test|--migration|--composer|--remove|--help} CMD\n"
         exit 1
 
 esac
