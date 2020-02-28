@@ -155,7 +155,7 @@ general_help() {
 run() {
     fix_env_file
     fix_perm_db
-    if [ $1 == 'build' ]; then
+    if [ "$1" == "build" ]; then
         eval ${DOCKERCMD} up -d --build $2 $3
     else
         eval ${DOCKERCMD} up -d $2 $3

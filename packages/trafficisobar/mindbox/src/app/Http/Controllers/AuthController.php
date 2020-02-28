@@ -8,7 +8,7 @@ use Validator,
     Illuminate\Routing\Controller;
 
 
-class AuthController
+class AuthController extends Controller
 {
     /**
      * @link https://developers.mindbox.ru/docs/аутентификация-по-паролю
