@@ -13,7 +13,6 @@ class MindboxServiceProvider extends BaseServiceProvider
      */
     public function boot()
     {
-        # TODO refactor this
         $this->publishes(
             [
                 __DIR__.'/../../configs/mindbox.php' => config_path('mindbox.php'),
