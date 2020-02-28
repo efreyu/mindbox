@@ -13,12 +13,12 @@ Route::group([
         return Inertia::render('Home', [
             'foo' => 'bar'
         ]);
-    });
+    })->name('mindbox.home');
 
 
-    Route::get('/auth', 'AuthController@index')->name('auth.index');
-    Route::post('/login', 'AuthController@login')->name('auth.login');
-    Route::get('/logout', 'AuthController@logout')->name('auth.logout');
+    Route::get('/auth', 'AuthController@index')->name('mindbox.auth.index');
+    Route::post('/login', 'AuthController@login')->name('mindbox.auth.login');
+    Route::get('/logout', 'AuthController@logout')->name('mindbox.auth.logout');
 
 
 

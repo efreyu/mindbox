@@ -41,6 +41,11 @@ class AuthController extends Controller
      */
     public function userAuth(Request $request)
     {
+        $result = [
+            'code' => 401,
+            'message' => 'Логин или пароль указаны не верно',
+        ];
+
         $requestFields = $request->all();
 
         $validator = Validator::make(
@@ -54,7 +59,15 @@ class AuthController extends Controller
             return response()->json($validator->errors()->toArray(), 401);
         }
 
-        $result = $this->authRequest($requestFields['email'], $requestFields['password']);
+        $credentials = [
+            'username' => $requestFields['email'],
+            'password' => $requestFields['password'],
+        ];
+
+        if (Auth::attempt($credentials)) {
+            $result['code'] = 200;
+            $result['message'] = 'Вы успешно авторизованы';
+        }
 
         return response()->json($result['message'], $result['code']);
     }
@@ -77,47 +90,24 @@ class AuthController extends Controller
             ]
         );
         if ($validator->fails()) {
-            return redirect()->route('auth.index')->with('errors', $validator->errors()->toArray());
+            return redirect()->route('mindbox.auth.index')->with('errors', $validator->errors()->toArray());
         }
 
-        $result = $this->authRequest($requestFields['email'], $requestFields['password']);
         $credentials = [
             'username' => $requestFields['email'],
             'password' => $requestFields['password'],
         ];
-        if ($result['code'] == 200 && Auth::attempt($credentials)) {
-            return redirect()->route('home')->with('successMessage', $result['message']);
+        if (Auth::attempt($credentials)) {
+            return redirect()->route('mindbox.home')->with('successMessage', 'yep!');
         }
 
-        return redirect()->route('auth.index')->with('errors', $result['message']);
+        return redirect()->route('mindbox.auth.index')->with('errors', 'fail');
     }
 
     public function logout() {
         Auth::logout();
+        \Session::forget('user');
 
-        return redirect()->route('home');
-    }
-
-    private function authRequest($email, $password) {
-        $result = [
-            'code' => 401,
-            'message' => '',
-        ];
-
-        $userInfo['customer'] = [
-            'email' => $email,
-            'password' => $password,
-        ];
-        $response = \DirectCRM::sendRequest('Jti.v3.CustomerAuthentication', $userInfo);
-
-        if ($response->isAuthenticated()) {
-            $result['code'] = 200;
-            $result['message'] = 'Вы успешно авторизованы';
-        } elseif ($response->isNotAuthenticated() || $response->isNotFound()) {
-            $result['code'] = 401;
-            $result['message'] = 'Логин или пароль указаны не верно';
-        }
-
-        return $result;
+        return redirect()->route('mindbox.home');
     }
 }

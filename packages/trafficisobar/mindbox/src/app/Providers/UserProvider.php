@@ -3,12 +3,12 @@
 
 namespace TrafficIsobar\Mindbox\app\Providers;
 
-use App\User;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\UserProvider as IlluminateUserProvider;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Support\Facades\Cookie;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use TrafficIsobar\Mindbox\app\Models\User;
 
 class UserProvider implements IlluminateUserProvider
 {
@@ -48,45 +48,16 @@ class UserProvider implements IlluminateUserProvider
 
     private function apiAuthUser($credentials)
     {
-//        $manager = new BillingManager();
-        dd($credentials);
         $userInfo['customer'] = [
-            'email' => $credentials['email'],
+            'email' => $credentials['username'],
             'password' => $credentials['password'],
         ];
+
         $response = \DirectCRM::sendRequest('Jti.v3.CustomerAuthentication', $userInfo);
+
         if ($response->isAuthenticated()) {
-            $credentials = [
-                'username' => $credentials['username'],
-                'password' => $credentials['password'],
-                'lang' => app()->getLocale()
-            ];
-        }
-        if (isset($credentials['key'])) {
-            // сквозная авторизация
-            try{  $response = $manager->query('auth', [
-                'username' => $credentials['username'],
-                'key' => $credentials['key'],
-                'checkcookie' => 'no',
-                'lang' => app()->getLocale()
-            ]);
-            } catch ( \Exception $e){
-                throw new HttpException(403,'key auth not valid',$e);
-            }
-        } else {
-            $response = $manager->query('auth', [
-                'username' => $credentials['username'],
-                'password' => $credentials['password'],
-                'lang' => app()->getLocale()
-            ]);
-        }
-
-        if ($response instanceof SuccessResponse) {
-            $response = $response->getResponse();
-            $user = new User($response['doc']['auth']['$userid'], $response['doc']['tparams']['username']['$'], $response['doc']['auth']['$email'], $response['doc']['auth']['$id'], $response['doc']['auth']['$level'], $response['doc']['$lang']);
-
-            Cookie::queue('log', 'y', 60 * 60 * 24);
-
+            $user = new User($credentials['username'], 'Mindbox UserName', app()->getLocale());
+//            Cookie::queue('log', 'y', 60 * 60 * 24);
             return $user;
         }
 

@@ -6,48 +6,41 @@ use Illuminate\Contracts\Auth\Authenticatable;
 
 class User implements Authenticatable
 {
-    protected $id;
     protected $username;
     protected $email;
-    protected $auth;
-    protected $level;
     protected $lang;
 
-    public function __construct($id, $username, $email, $auth, $level, $lang)
+    /**
+     * User constructor.
+     * @param $email
+     * @param $username
+     * @param $lang
+     */
+    public function __construct($email, $username, $lang)
     {
-        $this->id = $id;
-        $this->username = $username;
         $this->email = $email;
-        $this->auth = $auth;
-        $this->level = $level;
+        $this->username = $username;
         $this->lang = $lang;
     }
 
-    public function getId()
-    {
-        return $this->id;
-    }
-
+    /**
+     * @return mixed
+     */
     public function getUsername()
     {
         return $this->username;
     }
 
-    public function getEmail()
-    {
+    /**
+     * @return mixed
+     */
+    public function getEmail() {
         return $this->email;
     }
 
-    public function getAuth()
-    {
-        return $this->auth;
-    }
-
-    public function getLevel()
-    {
-        return $this->level;
-    }
-
+    /**
+     * @return mixed
+     */
     public function getLang()
     {
         return $this->lang;
