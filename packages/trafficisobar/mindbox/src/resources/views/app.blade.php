@@ -8,6 +8,14 @@
     <link rel="icon" type="image/x-icon" href="{{ mindbox_asset('favicon.ico') }}">
     <link rel="stylesheet" href="{{ mindbox_asset('css/app.css') }}">
     <script src="{{ mindbox_asset('js/app.js') }}" defer></script>
+    <script>
+        mindbox = window.mindbox || function() { mindbox.queue.push(arguments); };
+        mindbox.queue = mindbox.queue || [];
+        mindbox('create', {
+            endpointId: '{{ config('mindbox.endpointId') }}'
+        });
+    </script>
+    <script src="https://api.mindbox.ru/scripts/v1/tracker.js" async></script>
 </head>
 <body>
 @inertia

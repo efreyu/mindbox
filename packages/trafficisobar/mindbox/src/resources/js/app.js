@@ -1,10 +1,11 @@
 import { InertiaApp } from '@inertiajs/inertia-vue'
 import Vue from 'vue'
-// import axios from 'axios'
-// import VueAxios from 'vue-axios'
-
-// Vue.use(VueAxios, axios)
+import axios from 'axios'
+import VueAxios from 'vue-axios'
 import { AtomSpinner } from 'epic-spinners'
+
+
+Vue.use(VueAxios, axios)
 Vue.use(AtomSpinner)
 Vue.use(InertiaApp)
 

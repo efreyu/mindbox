@@ -20,13 +20,65 @@
                     </div>
                     <button type="submit" class="d-flex btn btn-primary" :disabled="loading">
                         <spinner v-if="loading" />
-                        Авторизоваться
+                        {{ authButton }}
                     </button>
                 </form>
             </div>
         </div>
     </layout>
 </template>
+
+<script>
+    import Layout from './../../Shared/Layout'
+    import Spinner from './../../Shared/SpinnerComponent'
+    export default {
+        props: ['errors'],
+        components: {
+            Layout,
+            Spinner,
+        },
+        data() {
+            return {
+                loading: false,
+                authButton: 'Авторизоваться',
+                authStay: 'Авторизоваться',
+                authProcess: 'Авторизация',
+                form: {
+                    email: null,
+                    password: null,
+                }
+            }
+        },
+        methods: {
+            loginUser() {
+                let passwordCallback = false;
+                this.loading = true;
+                this.authButton = this.authProcess;
+
+                if (!this.form.email || this.form.email.length < 6) {
+                    this.errors.email = ['Поле Email обязательно. Минимальная длинна 6 символов.'];
+                    passwordCallback = true;
+                    this.loading = false;
+                    this.authButton = this.authStay;
+                }
+                if (!this.form.password || this.form.password.length < 6) {
+                    this.errors.password = ['Поле Password обязательно. Минимальная длинна 6 символов.'];
+                    passwordCallback = true;
+                    this.loading = false;
+                    this.authButton = this.authStay;
+                }
+
+                if (!passwordCallback) {
+                    this.$inertia.post(`/login`, this.form)
+                        .then((response) => {
+                            this.loading = false;
+                            this.authButton = this.authStay;
+                        })
+                }
+            }
+        }
+    }
+</script>
 
 <style>
     .form-signin {
@@ -41,48 +93,3 @@
         text-align: center
     }
 </style>
-
-<script>
-    import Layout from './../../Shared/Layout'
-    import Spinner from './../../Shared/SpinnerComponent'
-    export default {
-        props: ['errors'],
-        components: {
-            Layout,
-            Spinner
-        },
-        data() {
-            return {
-                loading: false,
-                form: {
-                    email: null,
-                    password: null,
-                }
-            }
-        },
-        methods: {
-            loginUser() {
-                let passwordCallback = false;
-                this.loading = true;
-
-                if (!this.form.email || this.form.email.length < 6) {
-                    this.errors.email = ['Поле Email обязательно. Минимальная длинна 6 символов.'];
-                    passwordCallback = true;
-                    this.loading = false;
-                }
-                if (!this.form.password || this.form.password.length < 6) {
-                    this.errors.password = ['Поле Password обязательно. Минимальная длинна 6 символов.'];
-                    passwordCallback = true;
-                    this.loading = false;
-                }
-
-                if (!passwordCallback) {
-                    this.$inertia.post(`/login`, this.form)
-                        .then((response) => {
-                            this.loading = false;
-                        })
-                }
-            }
-        }
-    }
-</script>

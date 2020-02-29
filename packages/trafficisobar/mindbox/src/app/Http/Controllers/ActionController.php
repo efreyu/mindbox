@@ -62,7 +62,7 @@ class ActionController
 
     /**
      * @OA\Post(
-     *     path="/api/v1/action/task2",
+     *     path="/api/v1/action/task3",
      *     tags={"Активность 3"},
      *     summary="Запрос на активность 3",
      *     description="",
