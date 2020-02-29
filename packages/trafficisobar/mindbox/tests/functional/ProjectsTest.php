@@ -55,6 +55,26 @@ class ProjectsTest extends TestCase
     }
 
     /** @test */
+    public function call_auth_page() {
+        $response = $this->call('GET', '/auth');
+        $this->assertEquals(200, $response->status());
+    }
+
+    /** @test */
+    public function a_user_can_see_index_page() {
+        $response = $this->get('/');
+        $response->assertSuccessful();
+        $response->assertViewIs('mindbox::app');
+    }
+
+    /** @test */
+    public function a_user_can_see_auth_page() {
+        $response = $this->get('/auth');
+        $response->assertSuccessful();
+        $response->assertViewIs('mindbox::app');
+    }
+
+    /** @test */
     public function a_user_can_login_via_web() {
         $configs = [
             'email' => config("mindbox.testUserLogin"),
@@ -62,25 +82,27 @@ class ProjectsTest extends TestCase
         ];
 
         if ($configs['email'] && $configs['password']) {
-//            $this->post('/login', $configs)->assertStatus(200);
+            $response = $this->from('/login')->post('/login', $configs);
+            $response->assertRedirect('/');
         } else {
             $this->assertTrue(true);
         }
     }
 
-    /** @test */
+    #/** @test */
     public function a_user_send_wrong_data_via_web() {
         $wrongData = [
             'email' => $this->faker->word,
         ];
 
-        $data = $this->post('/login', $wrongData);
-//        $data->assertStatus(401);
-        $json = Helper::json_decode($data->getContent());
-//        $this->assertTrue(is_array($json));
+        $response = $this->from('/login')->post('/login', $wrongData);
+        $response->dump();
+        $response->assertStatus(401);
+        $json = Helper::json_decode($response->getContent());
+        $this->assertTrue(is_array($json));
         if ($json) {
-//            $this->assertTrue(array_key_exists('email', $json));
-//            $this->assertTrue(array_key_exists('password', $json));
+            $this->assertTrue(array_key_exists('email', $json));
+            $this->assertTrue(array_key_exists('password', $json));
         }
     }
 }
