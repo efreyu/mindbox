@@ -12,9 +12,6 @@
     export default {
         components: {
             AtomSpinner
-        },
-        mounted() {
-            // console.log('spiner mounted');
         }
     }
 </script>

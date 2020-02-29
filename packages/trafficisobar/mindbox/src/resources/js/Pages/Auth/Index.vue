@@ -31,6 +31,7 @@
 <script>
     import Layout from './../../Shared/Layout'
     import Spinner from './../../Shared/SpinnerComponent'
+
     export default {
         props: ['errors'],
         components: {

@@ -125,4 +125,7 @@
     .wrap {
         padding-top: 50px;
     }
+    .wrap h1 {
+        padding-bottom: 25px;
+    }
 </style>
