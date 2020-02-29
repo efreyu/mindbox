@@ -25,6 +25,8 @@ class AuthController extends Controller
      *         @OA\MediaType(
      *             mediaType="application/json",
      *             @OA\Schema(
+     *                 @OA\Property(property="email", type="string", example="test.email@example.com"),
+     *                 @OA\Property(property="password", type="string", example="123456"),
      *                 example={"email": "test.email@example.com","password": "123456"}
      *             )
      *         )

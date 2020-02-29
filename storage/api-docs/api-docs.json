@@ -1,0 +1,129 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Agency3 docs",
+        "version": "0.0.1"
+    },
+    "servers": [
+        {
+            "url": "http://tender.jti.jti.t-agency.ru/"
+        }
+    ],
+    "paths": {
+        "/api/v1/action/task1": {
+            "post": {
+                "tags": [
+                    "Активность 1"
+                ],
+                "summary": "Запрос на активность 1",
+                "description": "",
+                "operationId": "taskOne",
+                "requestBody": {
+                    "content": {
+                        "application/json": {}
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Пользователь авторизован, json {'message':''}"
+                    },
+                    "401": {
+                        "description": "Логин или пароль не верный, json {'message':''}"
+                    }
+                }
+            }
+        },
+        "/api/v1/action/task2": {
+            "post": {
+                "tags": [
+                    "Активность 3"
+                ],
+                "summary": "Запрос на активность 3",
+                "description": "",
+                "operationId": "taskThree",
+                "requestBody": {
+                    "content": {
+                        "application/json": {}
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Пользователь авторизован, json {'message':''}"
+                    },
+                    "401": {
+                        "description": "Логин или пароль не верный, json {'message':''}"
+                    }
+                }
+            }
+        },
+        "/api/1.0/user/auth": {
+            "post": {
+                "tags": [
+                    "Авторизация"
+                ],
+                "summary": "Авторизация по логину и паролю",
+                "description": "",
+                "operationId": "userAuth",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "test.email@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "123456"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "email": "test.email@example.com",
+                                    "password": "123456"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Пользователь авторизован, json {'message':''}"
+                    },
+                    "401": {
+                        "description": "Логин или пароль не верный, json {'message':''}"
+                    }
+                }
+            }
+        },
+        "/tools/logs": {
+            "get": {
+                "tags": [
+                    "Служебное"
+                ],
+                "summary": "Логи",
+                "operationId": "logs",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/tools/doc": {
+            "get": {
+                "tags": [
+                    "Служебное"
+                ],
+                "summary": "Документация",
+                "operationId": "doc",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        }
+    }
+}

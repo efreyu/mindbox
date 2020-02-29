@@ -1,17 +1,19 @@
 <?php
 
+use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\Route;
 
 Route::group([
     'namespace' => '\TrafficIsobar\Mindbox\app\Http\Controllers',
     'prefix' => '/api/v1',
-], function () {
+], function (Router $router) {
 
     # Авторизация
-    Route::post('user/auth', 'AuthController@userAuth')->name('user.auth');
+    $router->post('user/auth', 'AuthController@userAuth')->name('user.auth');
 
-    Route::group(['middleware' => 'web'], function (){
-        Route::get('/action/task1', 'ActionController@taskOne')->name('action.task.one');
-        Route::get('/action/task3', 'ActionController@taskThree')->name('action.task.three');
+    $router->group(['middleware' => 'web'], function (Router $router){
+        $router->get('/action/task1', 'ActionController@taskOne')->name('action.task.one');
+        $router->get('/action/task3', 'ActionController@taskThree')->name('action.task.three');
     });
 
 });

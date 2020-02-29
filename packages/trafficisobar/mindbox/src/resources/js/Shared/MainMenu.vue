@@ -4,6 +4,9 @@
             <div class="navbar-nav">
                 <inertia-link href="/" class="navbar-brand">{{ $page.app.name }}</inertia-link>
                 <inertia-link href="/" class="nav-item nav-link">Home</inertia-link>
+                <a target="_blank" href="/tools/logs" class="nav-item nav-link">Logs</a>
+                <a target="_blank" href="/tools/doc" class="nav-item nav-link">Docs</a>
+                <a target="_blank" href="https://github.com/efreyu/mindbox" class="nav-item nav-link">Repo</a>
             </div>
             <template v-if="isAuth()">
                 <div class="navbar-nav">

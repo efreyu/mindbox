@@ -28,6 +28,9 @@ class MindboxServiceProvider extends ServiceProvider
             return $app->make(\TrafficIsobar\Mindbox\app\Providers\UserProvider::class);
         });
 
+        $this->app->register(\L5Swagger\L5SwaggerServiceProvider::class);
+        $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
+
         $this->loadHelpers();
         app('router')->aliasMiddleware('web', '\Inertia\Middleware::class');
 

@@ -11,7 +11,17 @@ use Intervention\Image\Constraint;
 use Intervention\Image\Facades\Image;
 use League\Flysystem\Util;
 
-
+/**
+ * @OA\Server(
+ *     url="http://tender.jti.jti.t-agency.ru/"
+ * )
+ *
+ * @OA\Info(
+ *     title="Agency3 docs",
+ *     version="0.0.1"
+ * )
+ *
+ */
 class MindboxController extends Controller
 {
     public function assets(Request $request)

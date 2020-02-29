@@ -1,29 +1,29 @@
 <?php
 
 use Inertia\Inertia;
+use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\Route;
 
 Route::group([
     'namespace' => '\TrafficIsobar\Mindbox\app\Http\Controllers',
     'middleware' => 'web'
-], function () {
+], function (Router $router) {
 
     Inertia::setRootView('mindbox::app');
 
-    Route::get('/', function () {
-        return Inertia::render('Home', [
-            'foo' => 'bar'
-        ]);
+    $router->get('/', function () {
+        return Inertia::render('Home');
     })->name('mindbox.home');
 
 
-    Route::get('/auth', 'AuthController@index')->name('mindbox.auth.index');
-    Route::post('/login', 'AuthController@login')->name('mindbox.auth.login');
-    Route::get('/logout', 'AuthController@logout')->name('mindbox.auth.logout');
+    $router->get('/auth', 'AuthController@index')->name('mindbox.auth.index');
+    $router->post('/login', 'AuthController@login')->name('mindbox.auth.login');
+    $router->get('/logout', 'AuthController@logout')->name('mindbox.auth.logout');
 
 
 
     ## Asset Routes
-    Route::get('mindbox-assets', 'MindboxController@assets')->name('mindbox.assets');
+    $router->get('mindbox-assets', 'MindboxController@assets')->name('mindbox.assets');
 });
 
 Route::group(['prefix' => 'tools'], function () {
@@ -38,3 +38,13 @@ Route::group(['prefix' => 'tools'], function () {
      */
     Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 });
+
+/**
+ * @OA\Get(
+ *     path="/tools/doc",
+ *     tags={"Служебное"},
+ *     summary="Документация",
+ *     operationId="doc",
+ *     @OA\Response(response=200, description=""),
+ * )
+ */

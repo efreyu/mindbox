@@ -2173,6 +2173,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   methods: {
     isAuth: function isAuth() {
@@ -9428,6 +9431,36 @@ var render = function() {
                 "inertia-link",
                 { staticClass: "nav-item nav-link", attrs: { href: "/" } },
                 [_vm._v("Home")]
+              ),
+              _vm._v(" "),
+              _c(
+                "a",
+                {
+                  staticClass: "nav-item nav-link",
+                  attrs: { target: "_blank", href: "/tools/logs" }
+                },
+                [_vm._v("Logs")]
+              ),
+              _vm._v(" "),
+              _c(
+                "a",
+                {
+                  staticClass: "nav-item nav-link",
+                  attrs: { target: "_blank", href: "/tools/doc" }
+                },
+                [_vm._v("Docs")]
+              ),
+              _vm._v(" "),
+              _c(
+                "a",
+                {
+                  staticClass: "nav-item nav-link",
+                  attrs: {
+                    target: "_blank",
+                    href: "https://github.com/efreyu/mindbox"
+                  }
+                },
+                [_vm._v("Repo")]
               )
             ],
             1
