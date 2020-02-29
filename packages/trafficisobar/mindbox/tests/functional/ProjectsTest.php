@@ -4,12 +4,11 @@ namespace TrafficIsobar\Mindbox\Tests;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use TrafficIsobar\Mindbox\app\Http\Classes\Helper;
 
 class ProjectsTest extends TestCase
 {
-    use WithFaker, RefreshDatabase;
+    use WithFaker;
 
 
     /** @test */
@@ -55,12 +54,6 @@ class ProjectsTest extends TestCase
     }
 
     /** @test */
-    public function call_auth_page() {
-        $response = $this->call('GET', '/auth');
-        $this->assertEquals(200, $response->status());
-    }
-
-    /** @test */
     public function a_user_can_see_index_page() {
         $response = $this->get('/');
         $response->assertSuccessful();
@@ -87,6 +80,10 @@ class ProjectsTest extends TestCase
             $response->assertSessionHas('successMessage');
             $response->assertSessionMissing('errors');
             $response->assertRedirect('/');
+            $this->assertTrue(null != session()->get('user')->getId());
+            $this->assertTrue(null != session()->get('user')->getUsername());
+            $this->assertTrue(null != session()->get('user')->getEmail());
+            $this->assertTrue(null != session()->get('user')->getLang());
         } else {
             $this->assertTrue(true);
         }

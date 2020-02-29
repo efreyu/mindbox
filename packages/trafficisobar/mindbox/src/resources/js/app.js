@@ -4,6 +4,8 @@ import Vue from 'vue'
 // import VueAxios from 'vue-axios'
 
 // Vue.use(VueAxios, axios)
+import { AtomSpinner } from 'epic-spinners'
+Vue.use(AtomSpinner)
 Vue.use(InertiaApp)
 
 const app = document.getElementById('app')

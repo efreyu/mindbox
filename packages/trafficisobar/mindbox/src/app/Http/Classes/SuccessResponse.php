@@ -18,7 +18,7 @@ class SuccessResponse extends ResponseAbstract
 
         $this->responseCode = 200;
 
-        $this->responseMessage = '';
+        $this->responseMessage = $this->get('status') ?: '';
     }
 
 

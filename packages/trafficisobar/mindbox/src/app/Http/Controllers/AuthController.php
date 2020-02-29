@@ -30,10 +30,7 @@ class AuthController extends Controller
      *         )
      *     ),
      *     @OA\Response(response=200, description="Пользователь авторизован, json {'message':''}"),
-     *     @OA\Response(response=400, description="Данные не валидны, json {'message':''}"),
      *     @OA\Response(response=401, description="Логин или пароль не верный, json {'message':''}"),
-     *     @OA\Response(response=500, description="Ошибка интеграции c CRM, json {'message':''}"),
-     *     @OA\Response(response=503, description="CRM не доступна, json {'message':''}"),
      * )
      *
      * @param Request $request
@@ -43,7 +40,7 @@ class AuthController extends Controller
     {
         $result = [
             'code' => 401,
-            'message' => 'Логин или пароль указаны не верно',
+            'data' => ['message' => 'Логин или пароль указаны не верно'],
         ];
 
         $requestFields = $request->all();
@@ -66,20 +63,30 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $result['code'] = 200;
-            $result['message'] = 'Вы успешно авторизованы';
+            $result['data']['message'] = 'Вы успешно авторизованы';
         }
 
-        return response()->json($result['message'], $result['code']);
+        return response()->json($result['data'], $result['code']);
     }
 
+    /**
+     * @return \Illuminate\Http\RedirectResponse|\Inertia\Response
+     */
     public function index()
     {
-        return Inertia::render('Auth/Index');
+        if (Auth::guest()) {
+            return Inertia::render('Auth/Index');
+        } else {
+            return redirect()->route('mindbox.home')->with('successMessage', 'Вы уже авторизованы!');
+        }
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function login(Request $request)
     {
-
         $requestFields = $request->all();
 
         $validator = Validator::make(
@@ -98,12 +105,15 @@ class AuthController extends Controller
             'password' => $requestFields['password'],
         ];
         if (Auth::attempt($credentials)) {
-            return redirect()->route('mindbox.home')->with('successMessage', 'yep!');
+            return redirect()->route('mindbox.home')->with('successMessage', 'Вы успешно авторизовались!');
         }
 
-        return redirect()->route('mindbox.auth.index')->with('errors', 'fail');
+        return redirect()->route('mindbox.auth.index')->with('errors', 'Логин или пароль введены не верно!');
     }
 
+    /**
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function logout() {
         Auth::logout();
         \Session::forget('user');

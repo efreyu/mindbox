@@ -25,3 +25,16 @@ Route::group([
     ## Asset Routes
     Route::get('mindbox-assets', 'MindboxController@assets')->name('mindbox.assets');
 });
+
+Route::group(['prefix' => 'tools'], function () {
+    /**
+     * @OA\Get(
+     *     path="/tools/logs",
+     *     tags={"Служебное"},
+     *     summary="Логи",
+     *     operationId="logs",
+     *     @OA\Response(response=200, description=""),
+     * )
+     */
+    Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
+});

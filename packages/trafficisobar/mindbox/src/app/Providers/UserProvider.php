@@ -6,27 +6,33 @@ namespace TrafficIsobar\Mindbox\app\Providers;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\UserProvider as IlluminateUserProvider;
 use Illuminate\Contracts\Session\Session;
-use Illuminate\Support\Facades\Cookie;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use TrafficIsobar\Mindbox\app\Models\User;
 
 class UserProvider implements IlluminateUserProvider
 {
-    const SESSION_KEY_USER = 'user';
+    private const SESSION_KEY_USER = 'user';
 
     /**
      * The session used by the guard.
      *
-     * @var \Illuminate\Contracts\Session\Session
+     * @var Illuminate\Contracts\Session\Session
      */
     protected $session;
 
 
+    /**
+     * UserProvider constructor.
+     * @param Session $session
+     */
     public function __construct(Session $session)
     {
         $this->session = $session;
     }
 
+    /**
+     * @param mixed $identifier
+     * @return Authenticatable|mixed|null
+     */
     public function retrieveById($identifier)
     {
         $user = $this->session->get(self::SESSION_KEY_USER);
@@ -36,6 +42,10 @@ class UserProvider implements IlluminateUserProvider
         return $user;
     }
 
+    /**
+     * @param array $credentials
+     * @return Authenticatable|User|null
+     */
     public function retrieveByCredentials(array $credentials)
     {
         $user = $this->apiAuthUser($credentials);
@@ -46,6 +56,10 @@ class UserProvider implements IlluminateUserProvider
     }
 
 
+    /**
+     * @param $credentials
+     * @return User|null
+     */
     private function apiAuthUser($credentials)
     {
         $userInfo['customer'] = [
@@ -55,25 +69,37 @@ class UserProvider implements IlluminateUserProvider
 
         $response = \DirectCRM::sendRequest('Jti.v3.CustomerAuthentication', $userInfo);
 
-        if ($response->isAuthenticated()) {
-            $user = new User($credentials['username'], 'Mindbox UserName', app()->getLocale());
-//            Cookie::queue('log', 'y', 60 * 60 * 24);
-            return $user;
+        if ($response->isAuthenticated() && $id = $response->get('customer', 'ids', 'mindboxId')) {
+            return new User($id, $credentials['username'], 'Agency3', app()->getLocale());
         }
 
         return null;
     }
 
+    /**
+     * @param Authenticatable $user
+     * @param array $credentials
+     * @return bool
+     */
     public function validateCredentials(Authenticatable $user, array $credentials)
     {
         return true;
     }
 
+    /**
+     * @param mixed $identifier
+     * @param string $token
+     * @return Authenticatable|void|null
+     */
     public function retrieveByToken($identifier, $token)
     {
         //
     }
 
+    /**
+     * @param Authenticatable $user
+     * @param string $token
+     */
     public function updateRememberToken(Authenticatable $user, $token)
     {
         //

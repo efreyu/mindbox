@@ -64,6 +64,7 @@ class MindboxServiceProvider extends ServiceProvider
         Inertia::share('auth.user', function () {
             if (Auth::user()) {
                 return [
+                    'id' => Auth::user()->getId(),
                     'name' => Auth::user()->getUsername(),
                     'email' => Auth::user()->getEmail(),
                 ];

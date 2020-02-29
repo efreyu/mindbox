@@ -9,4 +9,9 @@ Route::group([
     # Авторизация
     Route::post('user/auth', 'AuthController@userAuth')->name('user.auth');
 
+    Route::group(['middleware' => 'web'], function (){
+        Route::get('/action/task1', 'ActionController@taskOne')->name('action.task.one');
+        Route::get('/action/task3', 'ActionController@taskThree')->name('action.task.three');
+    });
+
 });

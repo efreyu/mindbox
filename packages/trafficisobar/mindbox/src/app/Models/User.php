@@ -6,25 +6,36 @@ use Illuminate\Contracts\Auth\Authenticatable;
 
 class User implements Authenticatable
 {
+    protected $id;
     protected $username;
     protected $email;
     protected $lang;
 
     /**
      * User constructor.
-     * @param $email
-     * @param $username
-     * @param $lang
+     * @param $mindboxId int
+     * @param $email string
+     * @param $fakeUserName string
+     * @param $lang string
      */
-    public function __construct($email, $username, $lang)
+    public function __construct($mindboxId, $email, $fakeUserName, $lang)
     {
+        $this->id = $mindboxId;
         $this->email = $email;
-        $this->username = $username;
+        $this->username = $fakeUserName;
         $this->lang = $lang;
     }
 
     /**
-     * @return mixed
+     * @return int
+     */
+    public function getId() {
+        return $this->id;
+    }
+
+    /**
+     * Returns the username. This is a fake name because mindbox will not send the original username.
+     * @return string
      */
     public function getUsername()
     {
@@ -32,14 +43,14 @@ class User implements Authenticatable
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getEmail() {
         return $this->email;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getLang()
     {
@@ -55,7 +66,7 @@ class User implements Authenticatable
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getAuthIdentifier()
     {
@@ -63,13 +74,16 @@ class User implements Authenticatable
     }
 
 
+    /**
+     * @return void
+     */
     public function getAuthPassword()
     {
         // Returns the (hashed) password for the user
     }
 
     /**
-     * @return string
+     * @return void
      */
     public function getRememberToken()
     {
@@ -86,7 +100,7 @@ class User implements Authenticatable
     }
 
     /**
-     * @return string
+     * @return void
      */
     public function getRememberTokenName()
     {
