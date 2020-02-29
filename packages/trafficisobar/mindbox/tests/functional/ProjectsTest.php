@@ -82,27 +82,26 @@ class ProjectsTest extends TestCase
         ];
 
         if ($configs['email'] && $configs['password']) {
-            $response = $this->from('/login')->post('/login', $configs);
+            $response = $this->from('/auth')->post('/login', $configs);
+            $response->assertSessionHas('user');
+            $response->assertSessionHas('successMessage');
+            $response->assertSessionMissing('errors');
             $response->assertRedirect('/');
         } else {
             $this->assertTrue(true);
         }
     }
 
-    #/** @test */
+    /** @test */
     public function a_user_send_wrong_data_via_web() {
         $wrongData = [
             'email' => $this->faker->word,
         ];
 
-        $response = $this->from('/login')->post('/login', $wrongData);
-        $response->dump();
-        $response->assertStatus(401);
-        $json = Helper::json_decode($response->getContent());
-        $this->assertTrue(is_array($json));
-        if ($json) {
-            $this->assertTrue(array_key_exists('email', $json));
-            $this->assertTrue(array_key_exists('password', $json));
-        }
+        $response = $this->from('/auth')->post('/login', $wrongData);
+        $response->assertSessionMissing('user');
+        $response->assertSessionMissing('successMessage');
+        $response->assertSessionHas('errors');
+        $response->assertRedirect('/auth');
     }
 }
